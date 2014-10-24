@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-10-25T03:29:21+08:00</updated>
+  <updated>2014-10-25T03:30:48+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How to Deploy Php Projects With Docker]]></title>
+    <title type="html"><![CDATA[How to Deploy PHP Projects With Docker]]></title>
     <link href="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/"/>
     <updated>2014-10-18T17:00:00+08:00</updated>
     <id>http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker</id>
