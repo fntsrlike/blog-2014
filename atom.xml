@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-10-24T17:10:22+08:00</updated>
+  <updated>2014-10-25T03:29:21+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to Deploy Php Projects With Docker]]></title>
-    <link href="http://blog.fntsr.tw/blog/2014/10/18/how-to-deploy-php-projects-with-docker/"/>
+    <link href="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/"/>
     <updated>2014-10-18T17:00:00+08:00</updated>
-    <id>http://blog.fntsr.tw/blog/2014/10/18/how-to-deploy-php-projects-with-docker</id>
+    <id>http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker</id>
     <content type="html"><![CDATA[<p>本簡報是為PHPConf2014議程所準備的，但陸續會在針對簡報做維護，並且在這邊回答會眾對於當天大會聽講但是沒有聽懂的部分。</p>
 
 <ul>
@@ -41,9 +41,9 @@
   
   <entry>
     <title type="html"><![CDATA[Sublime Text 2]]></title>
-    <link href="http://blog.fntsr.tw/blog/2013/12/15/sublime-text-2/"/>
+    <link href="http://blog.fntsr.tw/articles/2013/12/15/sublime-text-2/"/>
     <updated>2013-12-15T15:03:12+08:00</updated>
-    <id>http://blog.fntsr.tw/blog/2013/12/15/sublime-text-2</id>
+    <id>http://blog.fntsr.tw/articles/2013/12/15/sublime-text-2</id>
     <content type="html"><![CDATA[<h2>Sublime Text 2</h2>
 
 <p>ST2是我在Programming時必備的編輯器（Editor），從原本使用Notepad++跳槽到ST2，變回不去了，更遑論筆電換成Mac後，更是確定使用ST2作為我的開發利器（雖然也不是不會使用神器Vim，但是很多快捷鍵還不熟，通常只有在連線到server才會用ＸＤ）。而在處理MBA2013年中升級到OS X 10.9的續航問題而嘗試重新安裝OS後，便利用這機會，把我有關ST2的相關設定作為筆記寫成這篇文章囉。</p>
@@ -189,9 +189,9 @@
   
   <entry>
     <title type="html"><![CDATA[國立中央大學軟體工程研究所推甄心得]]></title>
-    <link href="http://blog.fntsr.tw/blog/2013/12/04/NCUSE-recommendation-expeprience/"/>
+    <link href="http://blog.fntsr.tw/articles/2013/12/04/NCUSE-recommendation-expeprience/"/>
     <updated>2013-12-04T16:37:45+08:00</updated>
-    <id>http://blog.fntsr.tw/blog/2013/12/04/NCUSE-recommendation-expeprience</id>
+    <id>http://blog.fntsr.tw/articles/2013/12/04/NCUSE-recommendation-expeprience</id>
     <content type="html"><![CDATA[<h2>國立中央大學軟體工程研究所推甄心得</h2>
 
 <p>本文採用CC授權 姓名標示─非商業性─禁止改作 3.0 台灣  <a href="http://goo.gl/TwbVOk">http://goo.gl/TwbVOk</a></p>
@@ -280,9 +280,9 @@ Just Do It, Funny Hacking.</p>
   
   <entry>
     <title type="html"><![CDATA[Hello, World]]></title>
-    <link href="http://blog.fntsr.tw/blog/1970/01/01/hello-world/"/>
+    <link href="http://blog.fntsr.tw/articles/1970/01/01/hello-world/"/>
     <updated>1970-01-01T00:00:00+08:00</updated>
-    <id>http://blog.fntsr.tw/blog/1970/01/01/hello-world</id>
+    <id>http://blog.fntsr.tw/articles/1970/01/01/hello-world</id>
     <content type="html"><![CDATA[<figure class='code'><figcaption><span>hell, world </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
