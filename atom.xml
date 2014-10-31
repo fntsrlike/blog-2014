@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-10-31T21:45:20+08:00</updated>
+  <updated>2014-11-01T03:25:14+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -12,6 +12,180 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Use Docker Data Volume on OS X]]></title>
+    <link href="http://blog.fntsr.tw/articles/2014/10/31/use-docker-data-volume-on-os-x/"/>
+    <updated>2014-10-31T22:05:15+08:00</updated>
+    <id>http://blog.fntsr.tw/articles/2014/10/31/use-docker-data-volume-on-os-x</id>
+    <content type="html"><![CDATA[<h2>在 OS X 上，透過 boot2docker 使用 docker 的 data volume</h2>
+
+<p>Docker 1.3 在 2014-10-16 釋出。其中，在方便性上最讓人注目的更新，除了 exec 指令以外，就是 boot2docker 在 Mac OS X 資料夾分享功能的改進，本文主要是針對後者去做講述。</p>
+
+<h1>前言</h1>
+
+<p>由於 Docker 只支持 Linux 作業系統，倘若要於 OS X 使用 Docker ，會使用 boot2docker 這個工具，在 VirtualBox 上建立一個 boot2docker-vm 的映像檔。然後，透過這個 Linux VM 去操作 Docker。</p>
+
+<p>但是，在 Docker 1.3 之前，因為 boot2docker 的映像檔沒有支援 VirtualBox Guest Additions ，所以無法使用 Virtualbox 分享資料夾的功能，將 OS X 的資料夾掛載到虛擬機器裡。因此必須另外自行製作有支援該 VirtualBox Guest Additions 的映像檔（或是下載別人做好的），然後設定 Virtual Box ，把 OS X 的資料夾自動掛載到虛擬機器裡。</p>
+
+<p>不過，隨著 Docker 1.3 釋出，boot2docker 也一併將這個功能引入。使用者可以直接透過 boot2docker 的映像檔使用這功能，而且它會自動把 <code>/Users</code> 資料夾掛載到虛擬機器裡，不需要另外設定！</p>
+
+<p>下圖是在 OS X 上，使用 boot2docker 建立 data volume 的示意圖，希望能幫助各位了解運作原理。</p>
+
+<p><a href="http://blog.fntsr.tw/images/posts/2014-10-31-use-docker-data-volume-on-os-x-001.png"><img src="http://blog.fntsr.tw/images/posts/2014-10-31-use-docker-data-volume-on-os-x-001.png" width="512" height="384"></a></p>
+
+<h1>前置作業</h1>
+
+<p>在開始前，必須先安裝或更新 docker 和 boot2docker 到 1.30 以上的版本，更新的方法在我前一篇文章 <a href="http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/">Upgrade Docker and Boot2docker on OS X</a> 已經說明了，可以參考看看，這邊就不多贅述。</p>
+
+<p>接著在 Terminal 下 <code>$ boot2docker ssh 'ls -al /Users'</code> 的指令，確認是否已經成功掛載。如果成功，應該會出現 <code>/Users</code> 的目錄。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker ssh <span class="s1">&#39;ls -al /Users&#39;</span>
+</span><span class='line'>drwxr-xr-x    <span class="m">1</span> docker   staff          <span class="m">204</span> Mar <span class="m">29</span>  <span class="m">2014</span> .
+</span><span class='line'>drwxr-xr-x   <span class="m">17</span> root     root           <span class="m">400</span> Oct <span class="m">31</span> 10:29 ..
+</span><span class='line'>-rw-r--r--    <span class="m">1</span> docker   staff            <span class="m">0</span> Aug <span class="m">25</span>  <span class="m">2013</span> .localized
+</span><span class='line'>drwxrwxrwx    <span class="m">1</span> docker   staff          <span class="m">306</span> Oct <span class="m">18</span> 04:08 Shared
+</span><span class='line'>drwxr-xr-x    <span class="m">1</span> docker   staff         <span class="m">3774</span> Oct <span class="m">31</span> 17:52 user5566
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Data Volume</h1>
+
+<p>本文利用 ubuntu 的 images 去做建立 data volume 的示範。開始前，再次強調，因為 boot2docker 只有把 OS X 的 <code>/Users</code> 資料夾掛載到虛擬機上，所以 data volume 的 host 資料夾必須在 <code>/Users</code> 底下。</p>
+
+<h3>首先</h3>
+
+<p>把想建立 data volume 的資料夾與檔案準備好。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/docker-volume/test
+</span><span class='line'><span class="nv">$ </span>touch ~/docker-volume/test/volume-test.md
+</span><span class='line'><span class="nv">$ </span>ls -al ~/docker-volume/test
+</span><span class='line'>total 0
+</span><span class='line'>drwxr-xr-x  <span class="m">3</span> user5566  staff  <span class="m">102</span> <span class="m">11</span>  <span class="m">1</span> 02:01 .
+</span><span class='line'>drwxr-xr-x  <span class="m">3</span> user5566  staff  <span class="m">102</span> <span class="m">11</span>  <span class="m">1</span> 02:01 ..
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> user5566  staff    <span class="m">0</span> <span class="m">11</span>  <span class="m">1</span> 02:01 volume-test.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>接著</h3>
+
+<p>建立一個 Container 。</p>
+
+<p>並且，將剛才建立的資料夾，透過 data volume 掛載到 <code>/volume_test</code> 的位置。並且確認是否成功。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># 建立 Container</span>
+</span><span class='line'><span class="nv">$ </span>docker run -it -v ~/docker-volume/test:/volume_test ubuntu:latest /bin/bash
+</span><span class='line'>root@d0d097097657:/#
+</span><span class='line'>
+</span><span class='line'><span class="c"># 測試 data volume 是否成功</span>
+</span><span class='line'>root@d0d097097657:/# ls -al /volume_test/
+</span><span class='line'>total 4
+</span><span class='line'>drwxr-xr-x  <span class="m">1</span> <span class="m">1000</span> staff  <span class="m">102</span> Oct <span class="m">31</span>  <span class="m">2014</span> ./
+</span><span class='line'>drwxr-xr-x <span class="m">50</span> root root  <span class="m">4096</span> Oct <span class="m">31</span> 17:51 ../
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> <span class="m">1000</span> staff    <span class="m">0</span> Oct <span class="m">31</span>  <span class="m">2014</span> volume-test.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>最後</h3>
+
+<p>在 OS X 和 Container 中，都建立一個檔案，以測試同步與否。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># OS X</span>
+</span><span class='line'><span class="nv">$ </span>touch ~/docker-volume/test/file-from-osx.md
+</span><span class='line'>
+</span><span class='line'><span class="c"># Container</span>
+</span><span class='line'>root@d0d097097657:/# touch /volume_test/file-from-container.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看起來是成功了，歡呼囉！</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># OS X 確認</span>
+</span><span class='line'><span class="nv">$ </span>ls -al ~/docker-volume/test
+</span><span class='line'>total 0
+</span><span class='line'>drwxr-xr-x  <span class="m">5</span> fntsr  staff   170B <span class="m">11</span>  <span class="m">1</span> 02:12 .
+</span><span class='line'>drwxr-xr-x  <span class="m">3</span> fntsr  staff   102B <span class="m">11</span>  <span class="m">1</span> 02:01 ..
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 01:58 file-from-container.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:12 file-from-osx.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:01 volume-test.md
+</span><span class='line'>
+</span><span class='line'><span class="c"># Container 確認</span>
+</span><span class='line'>root@d0d097097657:/# ls -al /volume_test/
+</span><span class='line'>total 4
+</span><span class='line'>drwxr-xr-x  <span class="m">1</span> <span class="m">1000</span> staff  <span class="m">170</span> Oct <span class="m">31</span>  <span class="m">2014</span> .
+</span><span class='line'>drwxr-xr-x <span class="m">50</span> root root  <span class="m">4096</span> Oct <span class="m">31</span> 17:51 ..
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> <span class="m">1000</span> staff    <span class="m">0</span> Oct <span class="m">31</span> 17:58 file-from-container.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> <span class="m">1000</span> staff    <span class="m">0</span> Oct <span class="m">31</span>  <span class="m">2014</span> file-from-osx.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> <span class="m">1000</span> staff    <span class="m">0</span> Oct <span class="m">31</span>  <span class="m">2014</span> volume-test.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>後記</h1>
+
+<p>Data Volume 是 docker 在應用 LXC 一個非常重要的功能。在初學 Docker 前，因為不懂 boot2docker 的運作原理，在這功能鬼打牆好多次，都無法成功。後來知道原理後，卻覺得在 OS X 實作這功能太麻煩了，改用 VPS 去玩 Docker 。還好，現在 boot2docker 已經做好這件事了，讓我們可以更快樂的在 OS X 上面玩 Docker ，尤其是進行開發啦！(rock)</p>
+
+<p>剛好這塊是我在 <a href="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">PHPConf 演講</a> 裡，只有稍微帶過的部分，希望這篇文章能補足當時因為時間關係而沒講明的部分。在之後，我也會把握空閒時間，多寫幾篇有關 Docker 的文章，補足演講的缺口，希望大家會喜歡。 =D</p>
+
+<p>最後，祝各位在 OS X 上，愜意地 Docker 囉！</p>
+
+<h1>Reference</h1>
+
+<ul>
+<li><a href="https://medium.com/boot2docker-lightweight-linux-for-docker/boot2docker-together-with-virtualbox-guest-additions-da1e3ab2465c">boot2docker together with VirtualBox Guest Additions: How to mount /Users into boot2docker</a></li>
+<li><a href="https://docs.docker.com/userguide/dockervolumes/">Managing Data in Containers</a></li>
+<li><a href="https://blog.docker.com/2014/10/docker-1-3-signed-images-process-injection-security-options-mac-shared-directories/">DOCKER 1.3: SIGNED IMAGES, PROCESS INJECTION, SECURITY OPTIONS, MAC SHARED DIRECTORIES</a></li>
+<li><a href="https://github.com/boot2docker/boot2docker">boot2docker/boot2docker</a></li>
+<li><a href="https://github.com/boot2docker/boot2docker/issues/282#issuecomment-44601104">Volumes: vboxguest + vboxsf modules #282</a></li>
+<li><a href="https://www.facebook.com/groups/docker.taipei/permalink/1522080854693939/">Post of Docker.Taipei</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Upgrade Docker and Boot2docker on OS X]]></title>
