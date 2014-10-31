@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Php | 深藏若虛]]></title>
+  <link href="http://blog.fntsr.tw/categories/php/atom.xml" rel="self"/>
+  <link href="http://blog.fntsr.tw/"/>
+  <updated>2014-10-31T21:45:20+08:00</updated>
+  <id>http://blog.fntsr.tw/</id>
+  <author>
+    <name><![CDATA[Ruoshi Ling]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to Deploy PHP Projects With Docker]]></title>
+    <link href="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/"/>
+    <updated>2014-10-18T17:00:00+08:00</updated>
+    <id>http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker</id>
+    <content type="html"><![CDATA[<p>本簡報是為PHPConf2014議程所準備的，但陸續會在針對簡報做維護，並且在這邊回答會眾對於當天大會聽講但是沒有聽懂的部分。</p>
+
+<ul>
+<li>影片： (請耐心等候主辦單位釋出)</li>
+<li>簡報： <a href="https://speakerdeck.com/fntsrlike/how-to-deploy-php-projects-with-docker">SpeakerDeck</a> | <a href="http://www.slideshare.net/ruoshiling/how-to-deploy-php-projects-with-docker">SlideShare</a></li>
+</ul>
+
+
+<div style="width:400px;">
+<script async class="speakerdeck-embed" data-id="4be222a03e440132e5ed2a2ba31f9bce" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+</div>
+
+
+<!-- more -->
+
+
+<h2>Updated Log</h2>
+
+<h3>2014-10-25 Sat. | v2.1</h3>
+
+<ul>
+<li>因為SpeakDeck原本的項目一直無法轉檔成功，於是另外再開一個項目重新上傳，網址不變。</li>
+</ul>
+
+
+<h3>2014-10-24 Fri. | v2</h3>
+
+<ul>
+<li>修正演講時發現的小錯。</li>
+<li>補上缺少的Expose Port的投影片。</li>
+</ul>
+
+
+<h2>Q &amp; A</h2>
+]]></content>
+  </entry>
+  
+</feed>

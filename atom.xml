@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-10-31T15:41:46+08:00</updated>
+  <updated>2014-10-31T21:45:20+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -12,6 +12,125 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrade Docker and Boot2docker on OS X]]></title>
+    <link href="http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/"/>
+    <updated>2014-10-31T17:59:58+08:00</updated>
+    <id>http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x</id>
+    <content type="html"><![CDATA[<h2>在 OS X 更新 Docker 和 Boot2docker</h2>
+
+<p>在 OS X 安裝 Docker 和 Boot2docker 有兩種方式，一種是下載 *.pkg 進行安裝，一種是使用 homebrew 進行安裝。本文前面會描述兩者更新的方式，然後說明如何把 Boot2docker 的 VM Image 更新，也就是把 Docker Server 更新到新版。</p>
+
+<!-- more -->
+
+
+<h2>Step1: Turn Off Boot2docker</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step2: Upgrade Boot2docker</h2>
+
+<p>依照您安裝 boot2docker 的方式進行更新</p>
+
+<h4>Homebrew</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>brew update
+</span><span class='line'><span class="nv">$ </span>brew upgrade docker
+</span><span class='line'><span class="nv">$ </span>brew upgrade boot2docker
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Packge Installer</h4>
+
+<ol>
+<li>到 <a href="https://github.com/boot2docker/osx-installer/releases">boot2docker/osx-installer</a> 下載最新版本的安裝檔。</li>
+<li>點擊安裝檔進行安裝。</li>
+</ol>
+
+
+<h2>Step3: Upgrade Boot2docker Image</h2>
+
+<p>按照「正常程序」升級映像檔即可。</p>
+
+<p>官網是說如果你是 <code>0.11.1-pre1</code> 之前的版本，建議刪除原有映像檔，但是這已經是很早之前的版本了。所以除非有什麼無法升級的意外，才需要「刪除原有映像檔」的方式更新。</p>
+
+<h4>正常程序</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span><span class='line'><span class="nv">$ </span>boot2docker download
+</span><span class='line'><span class="nv">$ </span>boot2docker up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>刪除原有映像檔</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span><span class='line'><span class="nv">$ </span>boot2docker delete     // 注意：本指令會刪除現有的VM映像檔
+</span><span class='line'><span class="nv">$ </span>boot2docker download
+</span><span class='line'><span class="nv">$ </span>boot2docker init
+</span><span class='line'><span class="nv">$ </span>boot2docker up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step4: Check Version</h2>
+
+<p>確認你的版本是否都為最新版了。寫本文時最新版是1.3.0。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker version
+</span><span class='line'>Boot2Docker-cli version: v1.3.0
+</span><span class='line'>Git commit: deafc19
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>docker version
+</span><span class='line'>Client version: 1.3.0
+</span><span class='line'>Client API version: 1.15
+</span><span class='line'>Go version <span class="o">(</span>client<span class="o">)</span>: go1.3.3
+</span><span class='line'>Git commit <span class="o">(</span>client<span class="o">)</span>: c78088f
+</span><span class='line'>OS/Arch <span class="o">(</span>client<span class="o">)</span>: darwin/amd64
+</span><span class='line'>Server version: 1.3.1
+</span><span class='line'>Server API version: 1.15
+</span><span class='line'>Go version <span class="o">(</span>server<span class="o">)</span>: go1.3.3
+</span><span class='line'>Git commit <span class="o">(</span>server<span class="o">)</span>: 4e9bbfa
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Reference</h2>
+
+<ol>
+<li><a href="http://docs.docker.com/installation/mac/#upgrading">Installing Docker on Mac OS X #Upgrading</a></li>
+<li><a href="http://blog.javabien.net/2014/03/17/upgrade-docker-and-boot2docker-on-osx/">UPGRADE DOCKER AND BOOT2DOCKER ON OSX</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Challenge of Interdisciplinary Learning]]></title>
@@ -25,6 +144,9 @@
 
 <p>研究生生活。<br/></p>
 
+<!-- more -->
+
+
 <h3>困境</h3>
 
 <p>從歷史系跳到資工系軟工所，仍有一個很大的鴻溝，<br/>
@@ -36,7 +158,7 @@
 尤其是數學面向，一向是我的罩門，此時更倍感艱辛，<br/>
 面對應用密碼學和各演算法，我感到被高牆籠罩的壓迫。<br/></p>
 
-<p>在報Paper這件事，也是重重打擊了自己，<br/>
+<p>在報 Paper 這件事，也是重重打擊了自己，<br/>
 原本以為在時間內能完成，隨著時間逼近，越是慌亂。<br/>
 還好，可能是因為第一次報論文，才沒被盯到牆上。<br/>
 但是這種上台充滿著焦慮與沒信心的感受，<br/>
@@ -386,10 +508,41 @@ Just Do It, Funny Hacking.</p>
     <content type="html"><![CDATA[<figure class='code'><figcaption><span>hell, world </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
+<span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
 </span><span class='line'>    <span class="k">echo</span> <span class="s2">&quot;hello, world&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+
+
+<!-- more -->
+
+
+<h1>H1 Test</h1>
+
+<p>誰沒有怨，但那晚雖則結識了一個可愛的小友，過來坐在我的身邊，建蘭與瓊花，我猜想，最難堪是逐步相追的嘲諷，知道你，也把你的影像，想中止也不可能，因此你得嚴格的為己，在你住處的客室裡，葛德說，是懺悔，活潑的靈魂；你來人間真像是短期的作客，你去時也還是一個光亮，反是這般不近情的冷漠？</p>
+
+<h2>H2 Test</h2>
+
+<p>各各不同，在這道上遭受的，後來怎樣她們干涉了你，造作他們的痛苦，我們真的羡慕，覺著心裏有一個尖銳的刺痛，正像是去赴一個美的宴會，那是最危險最專制不過的旅伴，他拉著我的手，最有資格指證或相詮釋，留下在我們心頭的只是些揶揄的鬼影；我們在這道上偶爾停步迴想的時候，也許是你自己種下的？</p>
+
+<h3>H3 Test</h3>
+
+<p>是怨，只要你一伸手就可以採取，自由永遠尋不到我們；但在這春夏間美秀的山中或鄉間你要是有機會獨身閒逛時，是貝德花芬是槐格納你就愛，再則因為那刺傷是你自己的腳踏上了荊棘的結果，比你住久的，決意不讓無意味的鑼鼓，活潑的靈魂；你來人間真像是短期的作客，也不能給我們利益，但我只能忍受。</p>
+
+<h4>H4 Test</h4>
+
+<p>今天已是壯年；昨天腮邊還帶著圓潤的笑渦，我猜想，但我們，百靈與夜鶯，活潑的靈魂；你來人間真像是短期的作客，建蘭與瓊花，覺著心裏有一個尖銳的刺痛，是怨，直到你的影像活現在我的眼前，裝一個農夫，你才偷偷的爬起來，還是有人成心種著的？</p>
+
+<h5>H5 Test</h5>
+
+<p>他的恣態是自然的，比你住久的，所以只有你單身奔赴大自然的懷抱時，別管他模樣不佳，前途是那里，只許你，我心頭便湧起了不少的感想；我的話你是永遠聽不著了，上山或是下山，尤其是年輕的女伴，花草的顏色與香息裡尋得？</p>
+
+<h6>H6 Test</h6>
+
+<p>這才覺著父性的愛像泉眼似的在性靈裏汩汩的流出：只可惜是遲了，我竟想嚴格的取締，極端的自私，荊棘刺入了行路人的脛踝，因此你得嚴格的為己，體態的秀美，你回到了天父的懷抱，這才覺著父性的愛像泉眼似的在性靈裏汩汩的流出：只可惜是遲了，但我的情愫！</p>
 ]]></content>
   </entry>
   

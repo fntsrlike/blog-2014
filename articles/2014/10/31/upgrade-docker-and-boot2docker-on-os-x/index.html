@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Upgrade Docker and Boot2docker on OS X - 深藏若虛</title>
+  <meta name="author" content="Ruoshi Ling">
+
+  
+  <meta name="description" content="在 OS X 更新 Docker 和 Boot2docker 在 OS X 安裝 Docker 和 Boot2docker 有兩種方式，一種是下載 *.pkg 進行安裝，一種是使用 homebrew 進行安裝。本文前面會描述兩者更新的方式，然後說明如何把 Boot2docker 的 VM &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="canonical" href="http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="深藏若虛" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body    class="collapse-sidebar"  >
+  <header class="header">
+    <div class="logo">
+  <h1>
+    <a href="/">深藏若虛</a></h1>
+  </h1>
+  
+    <span class="tagline">史記·卷六十三·老子韓非傳：「良賈深藏若虛，君子盛德，容貌若愚。」</span>
+  
+</div>
+
+
+    
+<div class="search">
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="q" value="site:blog.fntsr.tw">
+      <input class="search-box" type="text" name="q" results="0" value="" placeholder="Search">
+    </fieldset>
+  </form>
+</div>
+
+<nav class="nav chrome-hack">
+  <ul class="inline-list">
+    <li>
+      <a href="http://fntsr.tw" title="About Me" target="_blank">
+        <i class="fa fa-file"></i>
+        <span>About Me</span>
+      </a>
+    </li>
+    <li>
+      <a href="/archives">
+        <i class="fa fa-archive"></i>
+        <span>Archive</span>
+      </a>
+    </li>
+    <li>
+      <a href="/atom.xml" target="_blank">
+        <i class="fa fa-rss"></i>
+        <span>Feeds</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+  </header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Upgrade Docker and Boot2docker on OS X</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-31T17:59:58+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>5:59 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://blog.fntsr.tw">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>在 OS X 更新 Docker 和 Boot2docker</h2>
+
+<p>在 OS X 安裝 Docker 和 Boot2docker 有兩種方式，一種是下載 *.pkg 進行安裝，一種是使用 homebrew 進行安裝。本文前面會描述兩者更新的方式，然後說明如何把 Boot2docker 的 VM Image 更新，也就是把 Docker Server 更新到新版。</p>
+
+<!-- more -->
+
+
+<h2>Step1: Turn Off Boot2docker</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step2: Upgrade Boot2docker</h2>
+
+<p>依照您安裝 boot2docker 的方式進行更新</p>
+
+<h4>Homebrew</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>brew update
+</span><span class='line'><span class="nv">$ </span>brew upgrade docker
+</span><span class='line'><span class="nv">$ </span>brew upgrade boot2docker
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Packge Installer</h4>
+
+<ol>
+<li>到 <a href="https://github.com/boot2docker/osx-installer/releases">boot2docker/osx-installer</a> 下載最新版本的安裝檔。</li>
+<li>點擊安裝檔進行安裝。</li>
+</ol>
+
+
+<h2>Step3: Upgrade Boot2docker Image</h2>
+
+<p>按照「正常程序」升級映像檔即可。</p>
+
+<p>官網是說如果你是 <code>0.11.1-pre1</code> 之前的版本，建議刪除原有映像檔，但是這已經是很早之前的版本了。所以除非有什麼無法升級的意外，才需要「刪除原有映像檔」的方式更新。</p>
+
+<h4>正常程序</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span><span class='line'><span class="nv">$ </span>boot2docker download
+</span><span class='line'><span class="nv">$ </span>boot2docker up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>刪除原有映像檔</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker stop
+</span><span class='line'><span class="nv">$ </span>boot2docker delete     // 注意：本指令會刪除現有的VM映像檔
+</span><span class='line'><span class="nv">$ </span>boot2docker download
+</span><span class='line'><span class="nv">$ </span>boot2docker init
+</span><span class='line'><span class="nv">$ </span>boot2docker up
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step4: Check Version</h2>
+
+<p>確認你的版本是否都為最新版了。寫本文時最新版是1.3.0。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker version
+</span><span class='line'>Boot2Docker-cli version: v1.3.0
+</span><span class='line'>Git commit: deafc19
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>docker version
+</span><span class='line'>Client version: 1.3.0
+</span><span class='line'>Client API version: 1.15
+</span><span class='line'>Go version <span class="o">(</span>client<span class="o">)</span>: go1.3.3
+</span><span class='line'>Git commit <span class="o">(</span>client<span class="o">)</span>: c78088f
+</span><span class='line'>OS/Arch <span class="o">(</span>client<span class="o">)</span>: darwin/amd64
+</span><span class='line'>Server version: 1.3.1
+</span><span class='line'>Server API version: 1.15
+</span><span class='line'>Go version <span class="o">(</span>server<span class="o">)</span>: go1.3.3
+</span><span class='line'>Git commit <span class="o">(</span>server<span class="o">)</span>: 4e9bbfa
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Reference</h2>
+
+<ol>
+<li><a href="http://docs.docker.com/installation/mac/#upgrading">Installing Docker on Mac OS X #Upgrading</a></li>
+<li><a href="http://blog.javabien.net/2014/03/17/upgrade-docker-and-boot2docker-on-osx/">UPGRADE DOCKER AND BOOT2DOCKER ON OSX</a></li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ruoshi Ling</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-10-31T17:59:58+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>5:59 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/docker/'>docker</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/" data-via="fntsrlike" data-counturl="http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/articles/2014/10/31/challenge-of-interdisciplinary-learning/" title="Previous Post: Challenge of interdisciplinary learning">&laquo; Challenge of interdisciplinary learning</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/">Upgrade Docker and Boot2docker on OS X</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/10/31/challenge-of-interdisciplinary-learning/">Challenge of Interdisciplinary Learning</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">How to Deploy PHP Projects With Docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2013/12/15/sublime-text-2/">Sublime Text 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2013/12/04/NCUSE-recommendation-expeprience/">國立中央大學軟體工程研究所推甄心得</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fntsrlike">@fntsrlike</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fntsrlike',
+            count: 1,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ruoshi Ling -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <br/>
+  Background provided by subtlepatterns.com.
+  <br/>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'fntsr';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/';
+        var disqus_url = 'http://blog.fntsr.tw/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
