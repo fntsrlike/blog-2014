@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to Build Discourse With Docker - 深藏若虛</title>
+  <meta name="author" content="Ruoshi Ling">
+
+  
+  <meta name="description" content="如何使用 Docker 架設 Discourse Discourse 是一個使用 Ruby on Rails 編寫的開源論壇程式。與傳統論壇以看版（Boards）為單位去收束文章的方式不同，他是直接使用分類（Categories）作為篩選，讓你去檢視你想要看的文章。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="canonical" href="http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="深藏若虛" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44721340-6']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar"  >
+  <header class="header">
+    <div class="logo">
+  <h1>
+    <a href="/">深藏若虛</a></h1>
+  </h1>
+  
+    <span class="tagline">史記·卷六十三·老子韓非傳：「良賈深藏若虛，君子盛德，容貌若愚。」</span>
+  
+</div>
+
+
+    
+<div class="search">
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="q" value="site:blog.fntsr.tw">
+      <input class="search-box" type="text" name="q" results="0" value="" placeholder="Search">
+    </fieldset>
+  </form>
+</div>
+
+<nav class="nav chrome-hack">
+  <ul class="inline-list">
+    <li>
+      <a href="http://fntsr.tw" title="About Me" target="_blank">
+        <i class="fa fa-file"></i>
+        <span>About Me</span>
+      </a>
+    </li>
+    <li>
+      <a href="/archives">
+        <i class="fa fa-archive"></i>
+        <span>Archive</span>
+      </a>
+    </li>
+    <li>
+      <a href="/atom.xml" target="_blank">
+        <i class="fa fa-rss"></i>
+        <span>Feeds</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+  </header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Build Discourse With Docker</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-07T15:15:59+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:15 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://blog.fntsr.tw">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>如何使用 Docker 架設 Discourse</h2>
+
+<p>Discourse 是一個使用 Ruby on Rails 編寫的開源論壇程式。與傳統論壇以看版（Boards）為單位去收束文章的方式不同，他是直接使用分類（Categories）作為篩選，讓你去檢視你想要看的文章。這種方式比較適合作為文章性質相近的討論平台，然後再去做比較細的分類。例如：「<a href="http://community.g0v.tw/">新． g0v 後勤中心</a>」就是討論有關零時政府的專案開發、或是「<a href="http://railsfun.tw/">RailsFun</a>」則專門針對 Ruby、Ruby on Rails 做手把手教學的討論與問答。</p>
+
+<p>會特別以這篇論壇作為教學題材，除了它本身真的滿好用以外，重要得是官方有提供 Docker 支援！它讓我們可以輕鬆使用它寫好的設定，去架設 Discourse ，甚至同時架設數個都輕而易舉！官方都如此貼心了，那我們還不來試試嗎？</p>
+
+<!-- more -->
+
+
+<h1>Requirement</h1>
+
+<p>在開始前，你必須先安裝下列項目，相關安裝方法，網路上已經滿多教學文了，可以喂狗問問。因為我們是把論壇架設在 Container 中，所以你不需要再去安裝 Ruby on Rails 或其他開發工具。</p>
+
+<ul>
+<li>Git</li>
+<li>Docker</li>
+</ul>
+
+
+<h1>Before Begining</h1>
+
+<p>在開始前，先做個說明。與官方教學文件不同，我這裡會將一些沒有提到可以改的地方做修改，讓讀者知道原來那邊是可以更換的，而不是以為「我只能這樣做」。比較大的改變如下，希望這些小改變能讓讀者懂得更加彈性的架設論壇。</p>
+
+<ul>
+<li>官方的安裝路徑是在<code>/var</code>下，本文則是使用<code>/srv</code>。</li>
+<li>官方的設定檔名稱是<code>app.yml</code>，本文則是用<code>childish.yml</code>。</li>
+<li>官方的 Port 設定是將 container <code>port 80</code> 對應到 host <code>port 80</code>，本文改成對應到 host <code>port 10080</code>。</li>
+</ul>
+
+
+<h1>Step1: Install Discourse</h1>
+
+<p>首先，我們要把官方寫好的工具 <a href="https://github.com/discourse/discourse_docker">discourse/discourse_docker</a> <code>git clone</code> 下來。然後複製一份設定檔範例到該專案的 containers 資料夾下。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># 先移動到你想要放置專案的資料夾，通常會是 /var ，本例則是使用 /srv</span>
+</span><span class='line'>~ <span class="nv">$ </span><span class="nb">cd</span> /srv
+</span><span class='line'>
+</span><span class='line'><span class="c"># 將 discourse_docker 專案 git clone 下來，並將資料夾名稱改為 discourse</span>
+</span><span class='line'>/srv <span class="nv">$ </span>git clone https://github.com/discourse/discourse_docker.git discourse
+</span><span class='line'>/srv <span class="nv">$ </span><span class="nb">cd </span>discourse
+</span><span class='line'>
+</span><span class='line'><span class="c"># 把 All in one 的設定範例複製一份到 container 資料夾，並改為自己想要的名稱，這裡是用`childish`。</span>
+</span><span class='line'>/srv/discourse <span class="nv">$ </span>cp samples/standalone.yml containers/childish.yml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Step2: Edit Configuration</h1>
+
+<p>接下來我們要編輯設定，可以使用你熟悉的軟體去做編輯，這邊是使用<code>vim</code>。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/srv/discourse <span class="nv">$ </span>vim containers/childish.yml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>這裡會依照原本設定項目的順序，把需要修改的部分列出來。並且已做修改，可以和原值做比較。</p>
+
+<figure class='code'><figcaption><span>/srv/discourse_docker/containers/childish.yml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">## 設定你要輸出的 Port，可以配合你網頁伺服器的設定，這裡是將`10080`對到`80`</span>
+</span><span class='line'><span class="c1">## 若不想使用網頁伺服器，可以直接將`80`對到`80`，這樣就可以直接讀取你的 domain 做拜訪。</span>
+</span><span class='line'><span class="l-Scalar-Plain">expose</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="s">&quot;10080:80&quot;</span>  <span class="c1"># 把 host 的 port 10080 轉到 container 的 port 80 (http)</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="s">&quot;2222:22&quot;</span>   <span class="c1"># 把 host 的 port 2222 轉到 container 的 port 22 (ssh)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## 分給資料庫的記憶體，如果你的記憶體有 1 GB，設定 128MB ，若有 4GB ，則建議設為 1GB</span>
+</span><span class='line'><span class="l-Scalar-Plain">db_shared_buffers</span><span class="p-Indicator">:</span> <span class="s">&quot;256MB&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## Unicorn 的 workers 數量，如果你的記憶體有 1 GB ，則設定 2：若是有 2 GB ，則建議 3 或 4。</span>
+</span><span class='line'><span class="l-Scalar-Plain">UNICORN_WORKERS</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## 設定 DISCOURSE_DEVELOPER_EMAILS 為您的 Email，記得加單引號。</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_DEVELOPER_EMAILS</span><span class="p-Indicator">:</span> <span class="s">&#39;diz@childish.tw&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## 設定 DISCOURSE_HOSTNAME 為您的 hostname ，記得加單引號。</span>
+</span><span class='line'><span class="c1">## 若只是架設在本機上，可以寫 localhost</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_HOSTNAME</span><span class="p-Indicator">:</span> <span class="s">&#39;diz.childish.tw&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## 設定郵件伺服器資訊，這裡很重要，若是沒設定好就無法使用論壇。非常不建議直接使用 Gmail。</span>
+</span><span class='line'><span class="c1">## 建議：這部分可以使用 Mandrill 的服務，詳細可參見本文的 Mail Test 說明。</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_SMTP_ADDRESS</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">smtp.mandrillapp.com</span>       <span class="c1"># 必填</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_SMTP_PORT</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">587</span>                           <span class="c1"># 選填</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_SMTP_USER_NAME</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">diz@childish.tw</span>          <span class="c1"># 選填</span>
+</span><span class='line'><span class="l-Scalar-Plain">DISCOURSE_SMTP_PASSWORD</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">MANDRILL_APP_PASSWORD</span>     <span class="c1"># 選填</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## 這裡是放置你論壇資料的目錄，包括 Database。</span>
+</span><span class='line'><span class="c1">## 將 /var/discourse/ 改為你專案的路徑，就是你 git clone 的目錄。這裡是改 /srv/discourse/。</span>
+</span><span class='line'><span class="c1">## 建議：可以把原本的 standalone 改成你的設定檔名稱或 hostname，讓以後要架多重論壇時可以方便管理。這裡是改成 diz.childish.tw</span>
+</span><span class='line'><span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">volume</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/srv/discourse/shared/diz.childish.tw</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">guest</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/shared</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">volume</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/srv/discourse/shared/diz.childish.tw/log/var-log</span>
+</span><span class='line'>      <span class="l-Scalar-Plain">guest</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/var/log</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Command</h1>
+
+<p>在你<code>git clone</code>下來的專案根目錄中，有一個檔名為<code>launcher</code>的腳本執行檔，它可以幫助我們快速使用 docker 架設論壇。在該資料夾下，使用<code>./launcger</code>去呼叫。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/srv/discourse <span class="nv">$ </span>./launcher
+</span><span class='line'>Usage: launcher COMMAND CONFIG <span class="o">[</span>--skip-prereqs<span class="o">]</span>
+</span><span class='line'>Commands:
+</span><span class='line'>    start:      Start/initialize a container
+</span><span class='line'>    stop:       Stop a running container
+</span><span class='line'>    restart:    Restart a container
+</span><span class='line'>    destroy:    Stop and remove a container
+</span><span class='line'>    enter:      Use nsenter to enter a container
+</span><span class='line'>    ssh:        Start a bash shell in a running container
+</span><span class='line'>    logs:       Docker logs <span class="k">for</span> container
+</span><span class='line'>    mailtest:   Test the mail settings in a container
+</span><span class='line'>    bootstrap:  Bootstrap a container <span class="k">for</span> the config based on a template
+</span><span class='line'>    rebuild:    Rebuild a container <span class="o">(</span>destroy old, bootstrap, start new<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>Options:
+</span><span class='line'>    --skip-prereqs   Don<span class="err">&#39;</span>t check prerequisites
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>它的使用方式就是程式<code>./launcher</code>，接著一個 COMMAND 參數，最後加上你的設定檔名稱（不含<code>.yml</code>）。在接下來的步驟中，會一一提及各 COMMAN 的使用時機。在這裡先知道它的使用方法就好。</p>
+
+<h1>Step3: Mail Test</h1>
+
+<p>在設定檔裡有提到 Mail Server 的設定很重要，這是因為在申請會員時，會寄信請你啟用帳號，否則就無法使用。而這也包括了我們要建立的第一個帳號，管理員帳號。若是這部分設定錯誤，將會導致連管理員帳號都無法登入的窘境。為了讓你知道設定是否正確，這個工具也提供了測試的程式，讓你在建立論壇前，先寄一封信自己，以測試設定是否正常。</p>
+
+<p>在下指令後，他會要求你輸入要寄送的信箱位址，填寫後送出即可。若是有收到信，就代表你的設定是正常的囉。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># launcher mailtest &lt;config_name&gt;</span>
+</span><span class='line'>/srv/discourse <span class="nv">$ </span>./launcher mailtest childish
+</span><span class='line'>Enter your email address: diz@childish.tw
+</span><span class='line'>DISCOURSE_SMTP_ settings:
+</span><span class='line'> <span class="nv">DISCOURSE_SMTP_PASSWORD</span> <span class="o">=</span> <span class="o">(</span>hidden<span class="o">)</span>
+</span><span class='line'> <span class="nv">DISCOURSE_SMTP_USER_NAME</span> <span class="o">=</span> diz@childish.tw
+</span><span class='line'> <span class="nv">DISCOURSE_SMTP_ADDRESS</span> <span class="o">=</span> smtp.mandrillapp.com
+</span><span class='line'> <span class="nv">DISCOURSE_SMTP_PORT</span> <span class="o">=</span> 587
+</span><span class='line'>
+</span><span class='line'>You are correctly configured to use: Mandrill
+</span><span class='line'>Success!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因為這隻程式會使用到 python 去讀取 yml ，若是你的伺服器環境有缺 <code>python3-yaml</code>這個套件，他會提示你去安裝，按照他給的訊息去安裝缺的套件就可以了。若你的作業系統是 Debian / Ubuntu ，可以下 <code>sudo apt-get install python3-yaml</code> 去安裝。</p>
+
+<h2>Mandrill</h2>
+
+<p>若是你沒有自己的 Mail Server ，可以去申請 <a href="https://mandrill.com/">Mandrill</a> 的服務。它是一個免費的 Mail Server 服務，特別針對網站系統信件的部分。他會提供您去建立多組 SMTP &amp; API Credentials ，讓我們減少泄漏帳號密碼的危險（這也是我不建議直接使用 Gmail的原因，而且還會時常無法連線，讓你收不到確認信，囧）。總之，若沒有自己的 Mail Server ，就去申請吧！</p>
+
+<h1>Step4: Bootstrap</h1>
+
+<p>設定檔編輯好、Mail Servrt 測試後，可以來產生 image 了。這裡使用<code>bootstrap</code>去建立。ˊ這部分會需要花一段時間，取決伺服器的網路速度和效能。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># launcher bootstrap &lt;config_name&gt;</span>
+</span><span class='line'>/srv/discourse <span class="nv">$ </span>./launcher bootstrap childish
+</span><span class='line'>.........
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>這邊若是遇到無法解析 github.com 的錯誤，可以參考 <a href="/articles/2014/11/08/docker-cant-resolve-github-dot-com/">Docker Can’t Resolve github.com</a> 這篇文章去解決。</p>
+
+<p>產生成功後，可以用<code>docker images</code>做確認。程式會產生以<code>local_discourse/&lt;config_name&gt;</code>格式為命名的 image 。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker images
+</span><span class='line'>REPOSITORY                 TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+</span><span class='line'>local_discourse/childish   latest              61004de94a0c        <span class="m">22</span> hours ago        1.489 GB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Step5: Start</h1>
+
+<p>有了 image 後，就使用<code>start</code>來初始化 contianer 吧。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># launcher start &lt;config_name&gt;</span>
+</span><span class='line'>/srv/discourse <span class="nv">$ </span>./launcher start childish
+</span><span class='line'>No cid found, creating a new container
+</span><span class='line'>Calculated ENV: .............. <span class="c"># Your enveironment setting</span>
+</span><span class='line'>945342195fc05cbfa706f3d1875ab6383fbf5d21a73488367908d9ece21e1abd
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接著，我們可以使用<code>docker ps</code>做確認。程式會產生以你設定檔名稱命名的 container。若是 STATUS 是顯示 Up 即代表成功了！</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/srv/docker/discourse <span class="nv">$ </span>docker ps
+</span><span class='line'>CONTAINER ID        IMAGE                             COMMAND       CREATED         STATUS         PORTS                                         NAMES
+</span><span class='line'>945342195fc0        local_discourse/childish:latest   <span class="s2">&quot;/sbin/boot&quot;</span>  <span class="m">52</span> seconds ago  Up <span class="m">51</span> seconds  0.0.0.0:2222-&gt;22/tcp, 0.0.0.0:10080-&gt;80/tcp   childish
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Step6: Browse</h1>
+
+<p>最後，您就可以透過你前面坐的設定來瀏覽網站啦。若是在本機可以拜訪 <code>http://localhost</code> ，或是去拜訪該伺服器的 hostname 。若 container 的 port 80 不是對應到 host 的 port 80 ，記得加上 port。</p>
+
+<p>以本範例來說就是拜訪 <code>http://diz.childish.tw:10080</code>。會這樣做設定，是因為我會再透過 nginx 去監聽 10080 port，讓後 bind 到透過 <code>diz.childish.tw</code> 訪問伺服器的連線。當然，這是延伸應用了。</p>
+
+<p>之後，就是 Discourse 相關的操作了，也不在本文的範疇內，按照網站上，官方給的提示去做就行啦。</p>
+
+<p>架設出來大致就如同 <a href="http://diz.childish.tw/">http://diz.childish.tw/</a>。希望大家都能架設成功囉！</p>
+
+<h1>後話</h1>
+
+<p>這是第一篇 Docker 實例應用的教學文，推廣性質還是比較重，主要還是讓讀者能夠跟著步驟，透過 Docker 將論壇建立起來。之後會想再寫一篇延伸，大概是關於使用 <code>launcher</code> 的其他管理，以及如何備份資料以及搬遷，展現使用 Docker 的靈活性。還請大家期待囉。</p>
+
+<h1>Reference</h1>
+
+<ul>
+<li><a href="http://www.discourse.org/">Discourse</a></li>
+<li><a href="https://github.com/discourse/discourse_docker">discourse/discourse_docker</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-discourse-on-ubuntu-14-04">How To Install Discourse on Ubuntu 14.04</a></li>
+<li><a href="https://github.com/discourse/discourse/blob/master/docs/INSTALL-digital-ocean.md">discourse / docs / INSTALL-digital-ocean.md</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Ruoshi Ling</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-11-07T15:15:59+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:15 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1/" data-via="fntsrlike" data-counturl="http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/articles/2014/10/31/use-docker-data-volume-on-os-x/" title="Previous Post: Use docker data volume on OS X">&laquo; Use docker data volume on OS X</a>
+      
+      
+        <a class="basic-alignment right" href="/articles/2014/11/08/docker-cant-resolve-github-dot-com/" title="Next Post: Docker can't resolve github.com">Docker can&#8217;t resolve github.com &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/articles/2014/11/08/docker-cant-resolve-github-dot-com/">Docker Can&#8217;t Resolve github.com</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/11/07/how-to-build-discourse-with-docker-1/">How to Build Discourse With Docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/10/31/use-docker-data-volume-on-os-x/">Use Docker Data Volume on OS X</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/">Upgrade Docker and Boot2docker on OS X</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/10/31/challenge-of-interdisciplinary-learning/">Challenge of Interdisciplinary Learning</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fntsrlike">@fntsrlike</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fntsrlike',
+            count: 1,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Ruoshi Ling -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <br/>
+  Background provided by subtlepatterns.com.
+  <br/>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'fntsr';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1/';
+        var disqus_url = 'http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

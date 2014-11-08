@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | 深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-11-01T03:29:57+08:00</updated>
+  <updated>2014-11-09T05:59:36+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker Can't Resolve github.com]]></title>
+    <link href="http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/"/>
+    <updated>2014-11-08T02:30:47+08:00</updated>
+    <id>http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com</id>
+    <content type="html"><![CDATA[<h2>Docker 無法解析 github.com</h2>
+
+<p>在 Ubuntu 環境下，使用 Docker 架設 Discourse 時遇到了問題，錯誤訊息如下：</p>
+
+<pre><code>fatal: unable to access 'https://github.com/SamSaffron/pups.git/': Could not resolve host: github.com
+fb4e120a8b107f0ec1e07b3e21a3a1f31e3a5879d30da65242e0333b30533efa
+FAILED TO BOOTSTRAP
+</code></pre>
+
+<p>這個問題的是 DNS 相關的錯誤，我們只要幫 Docker 指定 DNS Server 即可。解決辦法依照你安裝 Docker 的方式而異。</p>
+
+<!-- more -->
+
+
+<h3>via Ubuntu Package</h3>
+
+<p>首先，打開 docker 的設定檔。</p>
+
+<pre><code class="bash">$ vim /etc/default/docker
+</code></pre>
+
+<p>然後，將下面這行取消註解。</p>
+
+<pre><code class="bash">DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+</code></pre>
+
+<p>最後，重啟 Docker Server</p>
+
+<pre><code class="bash">$ sudo service docker restart
+</code></pre>
+
+<h3>via Binary</h3>
+
+<p>如果你是透過二進位檔案執行 Docker server，你只需在啟動 Docker daemon 時，加上 DNS 參數即可。如下：</p>
+
+<pre><code class="bash">$ sudo docker -d -D --dns 8.8.8.8 --dns 8.8.4.4 &amp;
+</code></pre>
+
+<p><code>8.8.8.8</code>和<code>8.8.4.4</code>都是 Google 的 DNS，你也可以增修你喜歡的 DNS Server。</p>
+
+<h1>Reference</h1>
+
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-discourse-on-ubuntu-14-04">How To Install Discourse on Ubuntu 14.04</a></li>
+<li><a href="https://meta.discourse.org/t/afatal-unable-to-access-https-github-com-samsaffron-pups-git-could-not-resolve-host-github-com/18611">A fatal: unable to access ‘https://github.com/SamSaffron/pups.git/’: Could not resolve host: github.com</a></li>
+<li><a href="http://stackoverflow.com/questions/24151129/docker-network-calls-fail-during-image-build-on-corporate-network">Docker - Network calls fail during image build on corporate network</a></li>
+<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_file">鳥哥的 Linux 私房菜 - 第十九章、主機名稱控制者： DNS 伺服器</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Use Docker Data Volume on OS X]]></title>
@@ -102,11 +159,11 @@ root@d0d097097657:/# touch /volume_test/file-from-container.md
 <pre><code class="bash"># OS X 確認
 $ ls -al ~/docker-volume/test
 total 0
-drwxr-xr-x  5 fntsr  staff   170B 11  1 02:12 .
-drwxr-xr-x  3 fntsr  staff   102B 11  1 02:01 ..
--rw-r--r--  1 fntsr  staff     0B 11  1 01:58 file-from-container.md
--rw-r--r--  1 fntsr  staff     0B 11  1 02:12 file-from-osx.md
--rw-r--r--  1 fntsr  staff     0B 11  1 02:01 volume-test.md
+drwxr-xr-x  5 user5566  staff   170B 11  1 02:12 .
+drwxr-xr-x  3 user5566  staff   102B 11  1 02:01 ..
+-rw-r--r--  1 user5566  staff     0B 11  1 01:58 file-from-container.md
+-rw-r--r--  1 user5566  staff     0B 11  1 02:12 file-from-osx.md
+-rw-r--r--  1 user5566  staff     0B 11  1 02:01 volume-test.md
 
 # Container 確認
 root@d0d097097657:/# ls -al /volume_test/
@@ -120,9 +177,9 @@ drwxr-xr-x 50 root root  4096 Oct 31 17:51 ..
 
 <h1>後記</h1>
 
-<p>Data Volume 是 docker 在應用 LXC 一個非常重要的功能。在初學 Docker 前，因為不懂 boot2docker 的運作原理，在這功能鬼打牆好多次，都無法成功。後來知道原理後，卻覺得在 OS X 實作這功能太麻煩了，改用 VPS 去玩 Docker 。還好，現在 boot2docker 已經做好這件事了，讓我們可以更快樂的在 OS X 上面玩 Docker ，尤其是進行開發啦！(rock)</p>
+<p>Data Volume 是 docker 在應用 LXC 時，一個非常重要的功能。在初學 Docker 前，因為不懂 boot2docker 的運作原理，在這功能鬼打牆好多次，都無法成功。後來知道原理後，卻覺得在 OS X 實作這功能太麻煩了，改用 VPS 直接用 Linux 去玩 Docker 。還好，現在 boot2docker 已經做好這件事了，讓我們可以更快樂的在 OS X 上面玩 Docker ，尤其是進行開發啦！(rock)</p>
 
-<p>剛好這塊是我在 <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">PHPConf 演講</a> 裡，只有稍微帶過的部分，希望這篇文章能補足當時因為時間關係而沒講明的部分。在之後，我也會把握空閒時間，多寫幾篇有關 Docker 的文章，補足演講的缺口，希望大家會喜歡。 =D</p>
+<p>剛好，這塊是我在 <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">PHPConf 演講</a> 裡，只有稍微帶過的部分，希望這篇文章能補足當時因為時間關係，而沒講明的部分。在之後，我也會把握空閒時間，多寫幾篇有關 Docker 的文章，補足演講的缺口，希望大家會喜歡。 =D</p>
 
 <p>最後，祝各位在 OS X 上，愜意地 Docker 囉！</p>
 

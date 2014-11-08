@@ -5,12 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>How to Deploy PHP Projects With Docker - 深藏若虛</title>
+  <title>Docker Can&#8217;t Resolve github.com - 深藏若虛</title>
   <meta name="author" content="Ruoshi Ling">
 
   
-  <meta name="description" content="本簡報是為PHPConf2014議程所準備的，但陸續會在針對簡報做維護，並且在這邊回答會眾對於當天大會聽講但是沒有聽懂的部分。 影片： (請耐心等候主辦單位釋出)
-簡報： SpeakerDeck | SlideShare Updated Log 2014-10-25 Sat. | v2.1 &hellip;">
+  <meta name="description" content="Docker 無法解析 github.com 在 Ubuntu 環境下，使用 Docker 架設 Discourse 時遇到了問題，錯誤訊息如下： 1
+2
+3
+fatal: unable to access 'https://github.com/SamSaffron/pups.git/': &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +22,7 @@
 
   
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="canonical" href="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker">
+  <link rel="canonical" href="http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="深藏若虛" type="application/atom+xml">
@@ -102,7 +104,7 @@
   
   <header>
     
-      <h1 class="entry-title">How to Deploy PHP Projects With Docker</h1>
+      <h1 class="entry-title">Docker Can&#8217;t Resolve github.com</h1>
     
     
       <p class="meta">
@@ -111,7 +113,7 @@
 
 
 
-<time class='entry-date' datetime='2014-10-18T17:00:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:00 pm</span></time>
+<time class='entry-date' datetime='2014-11-08T02:30:47+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:30 am</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://blog.fntsr.tw">Comments</a>
@@ -121,40 +123,66 @@
   </header>
 
 
-<div class="entry-content"><p>本簡報是為PHPConf2014議程所準備的，但陸續會在針對簡報做維護，並且在這邊回答會眾對於當天大會聽講但是沒有聽懂的部分。</p>
+<div class="entry-content"><h2>Docker 無法解析 github.com</h2>
 
-<ul>
-<li>影片： (請耐心等候主辦單位釋出)</li>
-<li>簡報： <a href="https://speakerdeck.com/fntsrlike/how-to-deploy-php-projects-with-docker">SpeakerDeck</a> | <a href="http://www.slideshare.net/ruoshiling/how-to-deploy-php-projects-with-docker">SlideShare</a></li>
-</ul>
+<p>在 Ubuntu 環境下，使用 Docker 架設 Discourse 時遇到了問題，錯誤訊息如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fatal: unable to access 'https://github.com/SamSaffron/pups.git/': Could not resolve host: github.com
+</span><span class='line'>fb4e120a8b107f0ec1e07b3e21a3a1f31e3a5879d30da65242e0333b30533efa
+</span><span class='line'>FAILED TO BOOTSTRAP</span></code></pre></td></tr></table></div></figure>
 
 
-<div style="width:400px;">
-<script async class="speakerdeck-embed" data-id="4be222a03e440132e5ed2a2ba31f9bce" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
-</div>
-
+<p>這個問題的是 DNS 相關的錯誤，我們只要幫 Docker 指定 DNS Server 即可。解決辦法依照你安裝 Docker 的方式而異。</p>
 
 <!-- more -->
 
 
-<h2>Updated Log</h2>
+<h3>via Ubuntu Package</h3>
 
-<h3>2014-10-25 Sat. | v2.1</h3>
+<p>首先，打開 docker 的設定檔。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>vim /etc/default/docker
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然後，將下面這行取消註解。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">DOCKER_OPTS</span><span class="o">=</span><span class="s2">&quot;--dns 8.8.8.8 --dns 8.8.4.4&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最後，重啟 Docker Server</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo service docker restart
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>via Binary</h3>
+
+<p>如果你是透過二進位檔案執行 Docker server，你只需在啟動 Docker daemon 時，加上 DNS 參數即可。如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo docker -d -D --dns 8.8.8.8 --dns 8.8.4.4 <span class="p">&amp;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>8.8.8.8</code>和<code>8.8.4.4</code>都是 Google 的 DNS，你也可以增修你喜歡的 DNS Server。</p>
+
+<h1>Reference</h1>
 
 <ul>
-<li>因為SpeakDeck原本的項目一直無法轉檔成功，於是另外再開一個項目重新上傳，網址不變。</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-discourse-on-ubuntu-14-04">How To Install Discourse on Ubuntu 14.04</a></li>
+<li><a href="https://meta.discourse.org/t/afatal-unable-to-access-https-github-com-samsaffron-pups-git-could-not-resolve-host-github-com/18611">A fatal: unable to access ‘https://github.com/SamSaffron/pups.git/’: Could not resolve host: github.com</a></li>
+<li><a href="http://stackoverflow.com/questions/24151129/docker-network-calls-fail-during-image-build-on-corporate-network">Docker - Network calls fail during image build on corporate network</a></li>
+<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_file">鳥哥的 Linux 私房菜 - 第十九章、主機名稱控制者： DNS 伺服器</a></li>
 </ul>
 
-
-<h3>2014-10-24 Fri. | v2</h3>
-
-<ul>
-<li>修正演講時發現的小錯。</li>
-<li>補上缺少的Expose Port的投影片。</li>
-</ul>
-
-
-<h2>Q &amp; A</h2>
 </div>
 
 
@@ -170,12 +198,12 @@
 
 
 
-<time class='entry-date' datetime='2014-10-18T17:00:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:00 pm</span></time>
+<time class='entry-date' datetime='2014-11-08T02:30:47+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:30 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/docker/'>docker</a>, <a class='category' href='/categories/php/'>php</a>
+    <a class='category' href='/categories/docker/'>docker</a>
   
 </span>
 
@@ -184,7 +212,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/" data-via="fntsrlike" data-counturl="http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/" data-via="fntsrlike" data-counturl="http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/" >Tweet</a>
   
   
   
@@ -193,10 +221,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/articles/2014/10/16/24y-old/" title="Previous Post: 24 years old">&laquo; 24 years old</a>
+        <a class="basic-alignment left" href="/articles/2014/11/07/how-to-build-discourse-with-docker-1/" title="Previous Post: how to build Discourse with docker">&laquo; how to build Discourse with docker</a>
       
-      
-        <a class="basic-alignment right" href="/articles/2014/10/31/challenge-of-interdisciplinary-learning/" title="Next Post: Challenge of interdisciplinary learning">Challenge of interdisciplinary learning &raquo;</a>
       
     </p>
   </footer>
@@ -294,8 +320,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/';
-        var disqus_url = 'http://blog.fntsr.tw/articles/2014/10/18/how-to-deploy-php-projects-with-docker/';
+        var disqus_identifier = 'http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/';
+        var disqus_url = 'http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/';
         var disqus_script = 'embed.js';
       
     (function () {

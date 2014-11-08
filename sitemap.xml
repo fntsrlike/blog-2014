@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://blog.fntsr.tw/articles/2014/11/08/docker-cant-resolve-github-dot-com/</loc>
+    <lastmod>2014-11-08T02:30:47+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://blog.fntsr.tw/articles/2014/11/07/how-to-build-discourse-with-docker-1/</loc>
+    <lastmod>2014-11-07T15:15:59+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://blog.fntsr.tw/articles/2014/10/31/use-docker-data-volume-on-os-x/</loc>
     <lastmod>2014-10-31T22:05:15+08:00</lastmod>
     <priority>0.8</priority>
@@ -21,6 +31,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>http://blog.fntsr.tw/articles/2014/10/16/24y-old/</loc>
+    <lastmod>2014-10-16T23:59:34+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://blog.fntsr.tw/articles/2013/12/15/sublime-text-2/</loc>
     <lastmod>2013-12-15T15:03:12+08:00</lastmod>
     <priority>0.8</priority>
@@ -37,19 +52,19 @@
   </url>
   <url>
     <loc>http://blog.fntsr.tw/archives/</loc>
-    <lastmod>2014-11-01T03:29:57+08:00</lastmod>
+    <lastmod>2014-11-09T05:59:36+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://blog.fntsr.tw/blog/archives/</loc>
-    <lastmod>2014-11-01T03:29:57+08:00</lastmod>
+    <lastmod>2014-11-09T05:59:36+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://blog.fntsr.tw/</loc>
-    <lastmod>2014-11-01T03:29:57+08:00</lastmod>
+    <lastmod>2014-11-09T05:59:36+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -253,11 +253,11 @@
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># OS X 確認</span>
 </span><span class='line'><span class="nv">$ </span>ls -al ~/docker-volume/test
 </span><span class='line'>total 0
-</span><span class='line'>drwxr-xr-x  <span class="m">5</span> fntsr  staff   170B <span class="m">11</span>  <span class="m">1</span> 02:12 .
-</span><span class='line'>drwxr-xr-x  <span class="m">3</span> fntsr  staff   102B <span class="m">11</span>  <span class="m">1</span> 02:01 ..
-</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 01:58 file-from-container.md
-</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:12 file-from-osx.md
-</span><span class='line'>-rw-r--r--  <span class="m">1</span> fntsr  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:01 volume-test.md
+</span><span class='line'>drwxr-xr-x  <span class="m">5</span> user5566  staff   170B <span class="m">11</span>  <span class="m">1</span> 02:12 .
+</span><span class='line'>drwxr-xr-x  <span class="m">3</span> user5566  staff   102B <span class="m">11</span>  <span class="m">1</span> 02:01 ..
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> user5566  staff     0B <span class="m">11</span>  <span class="m">1</span> 01:58 file-from-container.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> user5566  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:12 file-from-osx.md
+</span><span class='line'>-rw-r--r--  <span class="m">1</span> user5566  staff     0B <span class="m">11</span>  <span class="m">1</span> 02:01 volume-test.md
 </span><span class='line'>
 </span><span class='line'><span class="c"># Container 確認</span>
 </span><span class='line'>root@d0d097097657:/# ls -al /volume_test/
@@ -272,9 +272,9 @@
 
 <h1>後記</h1>
 
-<p>Data Volume 是 docker 在應用 LXC 一個非常重要的功能。在初學 Docker 前，因為不懂 boot2docker 的運作原理，在這功能鬼打牆好多次，都無法成功。後來知道原理後，卻覺得在 OS X 實作這功能太麻煩了，改用 VPS 去玩 Docker 。還好，現在 boot2docker 已經做好這件事了，讓我們可以更快樂的在 OS X 上面玩 Docker ，尤其是進行開發啦！(rock)</p>
+<p>Data Volume 是 docker 在應用 LXC 時，一個非常重要的功能。在初學 Docker 前，因為不懂 boot2docker 的運作原理，在這功能鬼打牆好多次，都無法成功。後來知道原理後，卻覺得在 OS X 實作這功能太麻煩了，改用 VPS 直接用 Linux 去玩 Docker 。還好，現在 boot2docker 已經做好這件事了，讓我們可以更快樂的在 OS X 上面玩 Docker ，尤其是進行開發啦！(rock)</p>
 
-<p>剛好這塊是我在 <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">PHPConf 演講</a> 裡，只有稍微帶過的部分，希望這篇文章能補足當時因為時間關係而沒講明的部分。在之後，我也會把握空閒時間，多寫幾篇有關 Docker 的文章，補足演講的缺口，希望大家會喜歡。 =D</p>
+<p>剛好，這塊是我在 <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">PHPConf 演講</a> 裡，只有稍微帶過的部分，希望這篇文章能補足當時因為時間關係，而沒講明的部分。在之後，我也會把握空閒時間，多寫幾篇有關 Docker 的文章，補足演講的缺口，希望大家會喜歡。 =D</p>
 
 <p>最後，祝各位在 OS X 上，愜意地 Docker 囉！</p>
 
@@ -330,6 +330,8 @@
         <a class="basic-alignment left" href="/articles/2014/10/31/upgrade-docker-and-boot2docker-on-os-x/" title="Previous Post: Upgrade docker and boot2docker on OS X">&laquo; Upgrade docker and boot2docker on OS X</a>
       
       
+        <a class="basic-alignment right" href="/articles/2014/11/07/how-to-build-discourse-with-docker-1/" title="Next Post: how to build Discourse with docker">how to build Discourse with docker &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -349,6 +351,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/articles/2014/11/08/docker-cant-resolve-github-dot-com/">Docker Can&#8217;t Resolve github.com</a>
+      </li>
+    
+      <li class="post">
+        <a href="/articles/2014/11/07/how-to-build-discourse-with-docker-1/">How to Build Discourse With Docker</a>
+      </li>
+    
+      <li class="post">
         <a href="/articles/2014/10/31/use-docker-data-volume-on-os-x/">Use Docker Data Volume on OS X</a>
       </li>
     
@@ -358,14 +368,6 @@
     
       <li class="post">
         <a href="/articles/2014/10/31/challenge-of-interdisciplinary-learning/">Challenge of Interdisciplinary Learning</a>
-      </li>
-    
-      <li class="post">
-        <a href="/articles/2014/10/18/how-to-deploy-php-projects-with-docker/">How to Deploy PHP Projects With Docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/articles/2013/12/15/sublime-text-2/">Sublime Text 2</a>
       </li>
     
   </ul>
