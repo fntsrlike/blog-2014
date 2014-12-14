@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-12-14T14:27:58+08:00</updated>
+  <updated>2014-12-15T00:51:29+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker Command Diagram]]></title>
+    <link href="http://blog.fntsr.tw/articles/2014/12/15/docker-command-diagram/"/>
+    <updated>2014-12-15T00:45:26+08:00</updated>
+    <id>http://blog.fntsr.tw/articles/2014/12/15/docker-command-diagram</id>
+    <content type="html"><![CDATA[<h2>Docker 指令示意圖</h2>
+
+<p><a href="http://blog.fntsr.tw/images/posts/2014-12-15-docker-command-diagram/1_1.png"><img src="http://blog.fntsr.tw/images/posts/2014-12-15-docker-command-diagram/1_1.png" width="512" height="384"></a></p>
+
+<p>看到《Docker —— 從入門到實踐­》正體中文版<a href="http://philipzheng.gitbooks.io/docker_practice/content/appendix_command/README.html">附錄一：命令查詢</a>裏有「一張圖總結 Docker 的命令」的圖，一時興起，就嘗試重畫一張圖，把所有指令都排進去。</p>
+
+<p>若有什麼認為需要修正的，歡迎在本篇文章留言、討論。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Let Students Try Docker at DigtialOcean!]]></title>
