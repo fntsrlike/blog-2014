@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | 深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/categories/docker/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-12-11T07:18:43+08:00</updated>
+  <updated>2014-12-14T14:27:58+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -320,6 +320,18 @@ Git commit (server): 4e9bbfa
 <ul>
 <li>修正演講時發現的小錯。</li>
 <li>補上缺少的Expose Port的投影片。</li>
+</ul>
+
+
+<h2>Feedback</h2>
+
+<ul>
+<li>講起來太快，很像在趕行程。</li>
+<li>實戰經驗說的不足。缺少了運用在正式伺服器上面的相關實作經驗</li>
+<li>缺少實務面 Scalability in Mind</li>
+<li>講者還只是學生沒有真正在軟體業待過，對軟體公司複數伺服器的自動化部署應該是完全沒有概念。</li>
+<li>AUFS的理解也不太正確。</li>
+<li>LXC是Docker 0.38的限制，Docker 1.0已經開發了自己的container lib而不再以linux container為預設值。</li>
 </ul>
 
 
