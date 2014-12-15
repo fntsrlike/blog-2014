@@ -6,6 +6,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>http://blog.fntsr.tw/articles/2014/12/14/docker-resource/</loc>
+    <lastmod>2014-12-14T17:07:06+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://blog.fntsr.tw/articles/2014/12/11/student-docker-resource/</loc>
     <lastmod>2014-12-11T01:20:58+08:00</lastmod>
     <priority>0.8</priority>
@@ -67,19 +72,19 @@
   </url>
   <url>
     <loc>http://blog.fntsr.tw/archives/</loc>
-    <lastmod>2014-12-15T00:51:29+08:00</lastmod>
+    <lastmod>2014-12-15T21:50:09+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://blog.fntsr.tw/blog/archives/</loc>
-    <lastmod>2014-12-15T00:51:29+08:00</lastmod>
+    <lastmod>2014-12-15T21:50:09+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://blog.fntsr.tw/</loc>
-    <lastmod>2014-12-15T00:51:29+08:00</lastmod>
+    <lastmod>2014-12-15T21:50:09+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
