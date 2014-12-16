@@ -4,7 +4,7 @@
   <title><![CDATA[深藏若虛]]></title>
   <link href="http://blog.fntsr.tw/atom.xml" rel="self"/>
   <link href="http://blog.fntsr.tw/"/>
-  <updated>2014-12-17T00:37:03+08:00</updated>
+  <updated>2014-12-17T04:00:01+08:00</updated>
   <id>http://blog.fntsr.tw/</id>
   <author>
     <name><![CDATA[Ruoshi Ling]]></name>
@@ -38,35 +38,6 @@
 <li>修改標題顏色。</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Docker Resource]]></title>
-    <link href="http://blog.fntsr.tw/articles/2014/12/14/docker-resource/"/>
-    <updated>2014-12-14T17:07:06+08:00</updated>
-    <id>http://blog.fntsr.tw/articles/2014/12/14/docker-resource</id>
-    <content type="html"><![CDATA[<h1>Official</h1>
-
-<ul>
-<li><a href="https://www.docker.com/">Website</a></li>
-<li><a href="https://docs.docker.com/">Documentaions</a></li>
-<li><a href="https://blog.docker.com/">Blog</a></li>
-</ul>
-
-
-<h1>Application</h1>
-
-<h2>Article</h2>
-
-<ul>
-<li><a href="https://www.google.com/android/devicemanager">构建一个高可用及自动发现的Docker基础架构</a></li>
-</ul>
-
-
-<h1>Slides</h1>
-
-<h2>- <a href="http://www.slideshare.net/rightscale/webinar-real-world-docker-2014-1209-v3-1">Real-World Docker: 10 Things We&rsquo;ve Learned - RightScale</a></h2>
 ]]></content>
   </entry>
   
